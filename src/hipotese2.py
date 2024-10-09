@@ -1,7 +1,6 @@
-import numpy as np 
-import pandas as pd 
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-
 
 def search_year(year):
     filepath = "../data/races.csv"
@@ -18,6 +17,18 @@ def filter_pit_stops(year, races):
     column_raceId = "raceId"
     
     return df_pit_stops[df_pit_stops[column_raceId].isin(races)]
+
+def remove_outliers(df, column, std_dev=2):
+    """Remove outliers com base em desvio padrão ajustado"""
+    mean = df[column].mean()
+    std = df[column].std()
+    
+    upper_limit = mean + std_dev * std
+    lower_limit = mean - std_dev * std
+    
+    df_cleaned = df[(df[column] >= lower_limit) & (df[column] <= upper_limit)]
+    
+    return df_cleaned
 
 def associate_constructors(pit_stops_filtered):
     filepath = "../data/results.csv"
@@ -57,27 +68,39 @@ def constructor_result(year):
     
     return constructor_points
 
-def pit_stops(year):
+def pit_stops(year, std_dev=2):
     column_constructorId = "constructorId"
     column_pits = "pits"
     column_time = "time"
 
     races = search_year(year)
     pit_stops_filtered = filter_pit_stops(year, races)
+    
+    # Remove outliers nos tempos de pit stop com desvio padrão ajustado
+    pit_stops_filtered = remove_outliers(pit_stops_filtered, "milliseconds", std_dev=std_dev)
+    
     merged_df = associate_constructors(pit_stops_filtered)
     pit_stops_agg = aggregate_pit_stops(merged_df)
     
     r_result = constructor_result(year)
-    fina = pd.DataFrame(columns=[column_pits, column_time], index=r_result.index)
+    final = pd.DataFrame(columns=[column_pits, column_time], index=r_result.index)
 
     for index, row in pit_stops_agg.iterrows():
         constructor = row[column_constructorId]
-        fina.loc[constructor, column_pits] = row['total_pits']
-        fina.loc[constructor, column_time] = row['total_time_ms']
+        final.loc[constructor, column_pits] = row['total_pits']
+        final.loc[constructor, column_time] = row['total_time_ms']
     
-    print(fina)
+    # Calcular a média de pit stop e remover as colunas 'pits' e 'time'
+    final["mean_pit"] = final[column_time] / final[column_pits]
+    final = final.drop(columns=[column_pits, column_time])
+    
+    print(final)
 
-pit_stops(2022)
+# Testando com desvio padrão ajustado
+pit_stops(2018, std_dev=2)  # Você pode tentar 1.5 ou 1 para valores mais restritivos
+
+
+
 
 
 
