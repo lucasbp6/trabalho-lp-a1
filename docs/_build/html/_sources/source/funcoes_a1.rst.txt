@@ -1,7 +1,0 @@
-funcoes\_a1 module
-==================
-
-.. automodule:: funcoes_a1
-   :members:
-   :undoc-members:
-   :show-inheritance:

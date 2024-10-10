@@ -1,9 +1,0 @@
-A1 LP
-=====
-
-.. toctree::
-   :maxdepth: 4
-
-   conf
-   funcoes_a1
-   unittests_a1
