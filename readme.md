@@ -5,7 +5,9 @@ O banco de dados foi retirado de https://www.kaggle.com/datasets/rohanrao/formul
 Nesse trabalho, cada integrante do grupo ficou responsavel por uma hipotese e todos os itens relacionados a ela mesma
 
 Hipotese 1 - Lucas Batista
+
 Hipotese 2 - Samyra
+
 Hipotese 3 - Jose
 
 ### Divisao do GITHUB
