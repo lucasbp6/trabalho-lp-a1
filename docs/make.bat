@@ -1,3 +1,4 @@
+
 @ECHO OFF
 
 pushd %~dp0
@@ -32,4 +33,3 @@ goto end
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 
 :end
-popd
