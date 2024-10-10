@@ -1,6 +1,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -9,9 +10,9 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'doc_hip1'
-copyright = '2024, lucas'
-author = 'lucas'
+project = 'Documentacao_a1'
+copyright = '2024, Jose, Lucas, Samyra'
+author = 'Jose, Lucas, Samyra'
 release = '1'
 
 # -- General configuration ---------------------------------------------------
