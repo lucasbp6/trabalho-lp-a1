@@ -31,7 +31,7 @@ def search_year(year: int) -> np.array:
         raise ValueError(f'{year} esta fora do intervalo 2023-1950')
     
     #Caminho para a planilha com informacoes sobre as corridas
-    filepath = os.path.join("..","data","races.csv")
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'races.csv')
     collumn_year = "year"
 
     df = pd.read_csv(filepath)
@@ -46,7 +46,7 @@ def championship_result(year: int) -> pd.DataFrame:
     seguindo a pontuacao oficial da categoria
 
     Parametros
-    ---------
+    ----------
     year: int
         Indica o ano desejado
 
@@ -88,7 +88,7 @@ def championship_result(year: int) -> pd.DataFrame:
     if year > 2023 or year < 1950:
         raise ValueError(f'{year} esta fora do intervalo 2023-1950')
     
-    filepath = os.path.join("..","data","driver_standings.csv")
+    filepath = (os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data","driver_standings.csv"))
     collumn_race = "raceId"
     collumn_driver = "driverId"
     collumn_points = "points"
@@ -115,8 +115,9 @@ def calculate_fastest_laps(df: pd.DataFrame, drivers: pd.Index, races: np.array)
     races: numpy.ndarray
         Id de todas as corridas de um certo ano
 
-    Retorno:
-    final pandas.DataFrame
+    Retorno
+    -------
+    final: pandas.DataFrame
         Retorna um DataFrame com a quantidade de voltas rapidas
         que cada piloto teve durante um ano
 
@@ -206,7 +207,7 @@ def find_driver_track_err(driverid: int, raceid: int) -> None:
         raise TypeError(f'os valores nao sao inteiros')
 
     #Busca na base de dados com nomes dos pilotos e imprime o nome e sobrenome
-    filepath = os.path.join("..", "data", "drivers.csv")
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "drivers.csv")
     df = pd.read_csv(filepath)
 
     name = df[df['driverId'] == driverid]
@@ -214,7 +215,7 @@ def find_driver_track_err(driverid: int, raceid: int) -> None:
         raise ValueError(f'nao foi encontrado piloto com id {driverid}')
     print(name[['forename', 'surname']].to_string(index=False))
     #Busca na base de dados dos GrandPrix ano, nome e rodada em relacao ao campeonato
-    filepath = os.path.join("..", "data", "races.csv")
+    filepath = (os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "races.csv"))
     df = pd.read_csv(filepath)
     
     track = df[df['raceId'] == raceid]
@@ -267,7 +268,7 @@ def calculate_hipotesis(f_year: int, l_year=None) -> pd.DataFrame:
         raise ValueError(f'Nao existem dados de voltas coletados antes de 1996')
     if not isinstance(f_year, int) or not isinstance(l_year, int):
         raise TypeError(f'Os valores para limites de ano nao sao inteiros {f_year}, {l_year}')
-    filepath = os.path.join("..","data","lap_times.csv")
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data","lap_times.csv")
     df = pd.read_csv(filepath)
     relacao = pd.DataFrame()
     
