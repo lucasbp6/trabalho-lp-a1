@@ -1,3 +1,16 @@
+###  Execução do código
+Instalação das dependencias: 
+
+```
+pip install -r requirements.txt
+```
+execução do programa para cada uma das hipóteses:
+```
+python3 src/hipotese1.py
+python3 src/hipotese2.py
+python3 src/hipotese3.py
+```
+
 ### Trabalho a1
 O banco de dados foi retirado de https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020
 
@@ -5,7 +18,9 @@ O banco de dados foi retirado de https://www.kaggle.com/datasets/rohanrao/formul
 Nesse trabalho, cada integrante do grupo ficou responsavel por uma hipotese e todos os itens relacionados a ela mesma
 
 Hipotese 1 - Lucas Batista
+
 Hipotese 2 - Samyra
+
 Hipotese 3 - Jose
 
 ### Divisao do GITHUB
