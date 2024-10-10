@@ -1,0 +1,7 @@
+unittests\_a1 module
+====================
+
+.. automodule:: unittests_a1
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,3 +1,4 @@
+
 @ECHO OFF
 
 pushd %~dp0
@@ -7,8 +8,8 @@ REM Command file for Sphinx documentation
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
-set SOURCEDIR=source
-set BUILDDIR=build
+set SOURCEDIR=.
+set BUILDDIR=_build
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -32,4 +33,3 @@ goto end
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 
 :end
-popd
