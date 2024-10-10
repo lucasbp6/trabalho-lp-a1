@@ -1,11 +1,46 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from typing import List, Union
+import os
+
+def load_csv(filepath: str) -> pd.DataFrame:
+    """
+    Carrega um arquivo CSV e retorna um DataFrame. Lida com erros de leitura.
+
+    Parameters
+    ----------
+    filepath : str
+        Caminho do arquivo CSV a ser carregado.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame com os dados do CSV.
+        
+    Raises
+    ------
+    FileNotFoundError
+        Se o arquivo não for encontrado.
+    pd.errors.EmptyDataError
+        Se o arquivo estiver vazio.
+    TypeError
+        Se o caminho do arquivo não for uma string.
+    """
+    if not isinstance(filepath, str):
+        raise TypeError("O caminho do arquivo deve ser uma string.")
+    
+    try:
+        return pd.read_csv(filepath)
+    except FileNotFoundError:
+        print(f"Erro: O arquivo {filepath} não foi encontrado.")
+        raise
+    except pd.errors.EmptyDataError:
+        print(f"Erro: O arquivo {filepath} está vazio.")
+        raise
 
 def search_year(year: int) -> np.ndarray:
     """
-    Retorna uma lista dos IDs de corridas (`raceId`) que ocorreram no ano especificado.
+    Retorna uma lista dos IDs de corridas (raceId) que ocorreram no ano especificado.
 
     Parameters
     ----------
@@ -17,14 +52,16 @@ def search_year(year: int) -> np.ndarray:
     np.ndarray
         Array de IDs das corridas realizadas no ano especificado.
         
-    Exemplos
-    --------
-    >>> search_year(2023)
-    [1098 1099 1100 1101 1102 1104 1105 1106 1107 1108 1109 1110 1111 1112
-    1113 1114 1115 1116 1117 1118 1119 1120]
+    Raises
+    ------
+    TypeError
+        Se o ano não for um inteiro.
     """
-    filepath = "data/races.csv"
-    df = pd.read_csv(filepath)
+    if not isinstance(year, int):
+        raise TypeError("O ano deve ser um inteiro.")
+    
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'races.csv')   
+    df = load_csv(filepath)
     column_year = "year"
     column_raceId = "raceId"
     
@@ -46,9 +83,19 @@ def filter_pit_stops(year: int, races: np.ndarray) -> pd.DataFrame:
     -------
     pd.DataFrame
         DataFrame contendo os pit stops filtrados.
+
+    Raises
+    ------
+    TypeError
+        Se o ano não for um inteiro ou se races não for um array numpy.
     """
-    filepath = "data/pit_stops.csv"
-    df_pit_stops = pd.read_csv(filepath)
+    if not isinstance(year, int):
+        raise TypeError("O ano deve ser um inteiro.")
+    if not isinstance(races, np.ndarray):
+        raise TypeError("Os IDs das corridas devem ser um array numpy.")
+    
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'pit_stops.csv') 
+    df_pit_stops = load_csv(filepath)
     column_raceId = "raceId"
     column_time = "milliseconds"
     
@@ -70,9 +117,17 @@ def associate_constructors(pit_stops: pd.DataFrame) -> pd.DataFrame:
     -------
     pd.DataFrame
         DataFrame com os pit stops associados aos construtores.
+
+    Raises
+    ------
+    TypeError
+        Se pit_stops não for um DataFrame.
     """
-    filepath = "data/results.csv"
-    df_results = pd.read_csv(filepath)
+    if not isinstance(pit_stops, pd.DataFrame):
+        raise TypeError("O pit_stops deve ser um DataFrame.")
+    
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'results.csv') 
+    df_results = load_csv(filepath)
     column_raceId = "raceId"
     column_driverId = "driverId"
     column_constructorId = "constructorId"
@@ -97,7 +152,15 @@ def aggregate_pit_stops(merged_df: pd.DataFrame) -> pd.DataFrame:
     -------
     pd.DataFrame
         DataFrame contendo a soma de tempos de pit stops e o total de pit stops por construtor.
+
+    Raises
+    ------
+    TypeError
+        Se merged_df não for um DataFrame.
     """
+    if not isinstance(merged_df, pd.DataFrame):
+        raise TypeError("merged_df deve ser um DataFrame.")
+    
     column_constructorId = "constructorId"
     column_time_ms = "milliseconds"
     column_pits = "stop"
@@ -120,11 +183,18 @@ def constructor_result(year: int) -> pd.Series:
     -------
     pd.Series
         Série contendo os pontos acumulados pelos construtores no ano.
-        
+
+    Raises
+    ------
+    TypeError
+        Se o ano não for um inteiro.
     """
+    if not isinstance(year, int):
+        raise TypeError("O ano deve ser um inteiro.")
+    
     races = search_year(year)
-    filepath = "data/constructor_results.csv"
-    df = pd.read_csv(filepath)
+    filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'constructor_results.csv')  
+    df = load_csv(filepath)
     
     column_raceId = "raceId"
     column_constructorId = "constructorId"
@@ -148,7 +218,15 @@ def pit_stops(year: int) -> pd.DataFrame:
     -------
     pd.DataFrame
         DataFrame contendo a média de pit stop por construtor.
+
+    Raises
+    ------
+    TypeError
+        Se o ano não for um inteiro.
     """
+    if not isinstance(year, int):
+        raise TypeError("O ano deve ser um inteiro.")
+
     column_constructorId = "constructorId"
     column_pits = "pits"
     column_time = "time"
@@ -169,8 +247,7 @@ def pit_stops(year: int) -> pd.DataFrame:
     
     final["mean_pit"] = final[column_time] / final[column_pits]
     final = final.drop(columns=[column_pits, column_time])
-    
-    print(final)
+ 
     return final 
 
 def plot_scatter(combined_df: pd.DataFrame) -> None:
@@ -181,7 +258,15 @@ def plot_scatter(combined_df: pd.DataFrame) -> None:
     ----------
     combined_df : pd.DataFrame
         DataFrame contendo as informações combinadas de pit stops e pontos.
+
+    Raises
+    ------
+    TypeError
+        Se combined_df não for um DataFrame.
     """
+    if not isinstance(combined_df, pd.DataFrame):
+        raise TypeError("combined_df deve ser um DataFrame.")
+    
     plt.figure(figsize=(10, 6))
     scatter = plt.scatter(combined_df['mean_pit'], combined_df['points'], c=combined_df['year'], cmap='viridis', alpha=0.7)
     plt.colorbar(scatter, label='Ano')
@@ -189,9 +274,7 @@ def plot_scatter(combined_df: pd.DataFrame) -> None:
     plt.xlabel('Média de Pit Stops (ms)')
     plt.ylabel('Pontuação dos Construtores')
     plt.grid(True)
-    plt.savefig("scatter_pit_stops_vs_points.png")
     plt.show()
-
 
 def analyze_pit_stops_across_years(start_year: int, end_year: int) -> None:
     """
@@ -203,31 +286,23 @@ def analyze_pit_stops_across_years(start_year: int, end_year: int) -> None:
         Ano inicial para análise.
     end_year : int
         Ano final para análise.
+
+    Raises
+    ------
+    ValueError
+        Se os anos de início e fim forem menores ou iguais a 2010.
     """
-    all_years_data = []
+    if start_year <= 2010 or end_year <= 2010:
+        raise ValueError("Os anos de início e fim devem ser maiores que 2010.")
 
-    # Iterar sobre cada ano no intervalo
+    combined_df = pd.DataFrame()
+
     for year in range(start_year, end_year + 1):
-        print(f"Analisando o ano {year}...")
+        year_data = pit_stops(year)
+        year_data['year'] = year
+        year_data['points'] = constructor_result(year)
+        combined_df = pd.concat([combined_df, year_data])
 
-        # Obter os pit stops e os resultados dos construtores para o ano
-        pits = pit_stops(year)
-        points = pd.DataFrame(constructor_result(year), columns=['points'])
-        
-        # Combinar os dados de pit stops e pontos
-        df_combined = pd.merge(pits, points, left_index=True, right_index=True)
-        
-        # Armazenar os dados de cada ano
-        df_combined['year'] = year
-        all_years_data.append(df_combined)
-
-    # Concatenar os dados de todos os anos
-    combined_df = pd.concat(all_years_data)
-    
-    # Gerar o gráfico
     plot_scatter(combined_df)
-
-# Chamar a função para analisar os dados de 2010 a 2023
-analyze_pit_stops_across_years(2010, 2023)
-
-
+if __name__ == '__main__':
+    analyze_pit_stops_across_years(2011,2023)
